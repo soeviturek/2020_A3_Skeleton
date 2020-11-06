@@ -53,6 +53,8 @@ public class GameCharGen
 					for(String s : results) System.out.println(s);
 					break;
 				case "WS":
+					myCharGen.wiserThanStrongOrStrongAsWise();
+					myCharGen.display();
 					break;
 				case "DC":
 					myCharGen.display();

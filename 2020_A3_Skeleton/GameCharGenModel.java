@@ -62,19 +62,27 @@ public class GameCharGenModel
 		if(gameCharCount == 0){
 			throw new NoGameCharacterFoundException();
 		}
+		//result set
 		String[] result= new String[4];
+
+		//local variables
 		double averageWisdom = 0;
 		int characterCount = 0;
 		int maxValue = 0;
 		int characterIndex = 0;
 		String name = null;
+		//loop through the character array
 		for(int i = 0; i<gameCharCount;i++) {
 			GameCharacter character = gameCharacterAt(i);
 			int characterWisdom = character.getWisdom();
 			averageWisdom+= characterWisdom;
 			characterCount++;
 			//update maximum
-			if(characterWisdom > maxValue){maxValue=characterWisdom; characterIndex = i; name = character.getName();}
+			if(characterWisdom > maxValue){
+				maxValue=characterWisdom;
+				characterIndex = i;
+				name = character.getName();
+			}
 		}
 		averageWisdom = averageWisdom / gameCharCount;
 		result[0] = "Character Index:\t\t"+Integer.toString(characterIndex);
@@ -91,8 +99,44 @@ public class GameCharGenModel
 		if(gameCharCount == 0){
 			throw new NoGameCharacterFoundException();
 		}
+		//new array
+		GameCharacter newArray[] = new GameCharacter[randomGameChars.length];
+		int INDEX = 0;
+		//loop
+		for(int i = 0; i<gameCharCount;i++) {
+			GameCharacter character = gameCharacterAt(i);
+			//if applicable add to new array
+			if (character.getIntelligence() < character.getStrength()){
+				newArray[INDEX] = character;
+				INDEX++;
+			}
+		}
+
+		//sort
+		advanceInsertSortWithBinarySearch(newArray);
+		randomGameChars = newArray;
+
 
 		
+	}
+	public static void advanceInsertSortWithBinarySearch(GameCharacter[] arr) {
+		for (int i = 1; i < arr.length; i++) {
+			GameCharacter temp = arr[i];
+			int low = 0, high = i - 1;
+			int mid = -1;
+			while (low <= high) {
+				mid = low + (high - low) / 2;
+				if (arr[mid].getIntelligence() > temp.getIntelligence()) {
+					high = mid - 1;
+				} else {
+					low = mid + 1;
+				}
+			}
+			for(int j = i - 1; j >= low; j--) {
+				arr[j + 1] = arr[j];
+			}
+			arr[low] = temp;
+		}
 	}
 
 	public String display() {
